@@ -1,3 +1,2 @@
-import colors from 'colors'
 
-console.log(colors.bgBlue('startando app'))
+console.log('startando app')
