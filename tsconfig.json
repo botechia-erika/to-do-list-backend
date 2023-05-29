@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "target": "ES6", /* Specify ECMAScript target version */
-    "module": "ES6", /* Specify module code generation */
     "sourceMap": true, /* Generates corresponding '.map' file. */
+    "module": "commonjs",
     "rootDir": "./src", /* Specify the root directory of input files. */
     "outDir": "./build", /* Redirect output structure to the directory. */
     "removeComments": true, /* Do not emit comments to output. */
