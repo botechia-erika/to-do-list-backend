@@ -1,4 +1,4 @@
--- Active: 1685329340669@@127.0.0.1@3306
+-- Active: 1685366005847@@127.0.0.1@3306
 
 CREATE TABLE
     authors (
@@ -7,7 +7,7 @@ CREATE TABLE
         username TEXT NOT NULL UNIQUE,
         email TEXT NOT NULL UNIQUE,
         password TEXT NOT NULL,
-        role text not null,
+        role text not null DEFAULT "NORMAL",
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
 
@@ -45,7 +45,11 @@ VALUES (
         "NORMAL"
     );
 
-SELECT * FROM authors;
+SELECT * FROM authors WHERE name LIKE '%VITOR%';
+
+SELECT * FROM authors ;
+
+SELECT id , created_at FROM authors ORDER BY created_at DESC;
 
 CREATE TABLE
     tasks (
@@ -83,8 +87,6 @@ VALUES (
     );
 
 SELECT * FROM tasks;
-
-SELECT * FROM authors WHERE created_at ORDER BY MAX(NOW());
 
 CREATE TABLE
     authors_tasks (
