@@ -105,6 +105,106 @@ app.post("/tasks/create", async (req: Request, res: Response) => {
         }
     }
 })
+/*************************TASKS DELETE ************************* */
+
+app.delete("/tasks/:id", async (req: Request, res: Response) => {
+
+    try {
+        const idTaskDelete = req.params.id
+
+        const [tasks] = await db("tasks").where({ id: idTaskDelete })
+        if (!tasks) {
+            throw new Error("usuario  nao encontrado")
+        }
+        await db("tasks").delete().where({ id: idTaskDelete })
+        res.status(200).send({ message: 'tasks deletado com sucesso' })
+    }
+    catch (error) {
+        console.log(error)
+
+        if (req.statusCode === 200) {
+            res.status(500)
+        }
+
+        if (error instanceof Error) {
+            res.send(error.message)
+        } else {
+            res.send("Erro inesperado")
+        }
+    }
+})
+
+
+/***********************************EDIT AUTHORS ************************************************* */
+
+app.put("/tasks/:id", async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id
+        const newid = req.body.id as string | undefined
+        const newTitle = req.body.title as string | undefined
+        const newDescription = req.body.description as string | undefined
+        const newStatus = req.body.status as number | undefined
+
+
+        if (newid !== undefined) {
+            if (typeof newid !== "string") {
+                res.status(400)
+                throw new Error("email deve ser tipo string")
+            }
+        }
+
+
+        if (newTitle !== undefined) {
+            if (typeof newTitle !== "string") {
+                res.status(400)
+                throw new Error("email deve ser tipo string")
+            }
+        }
+
+        if (newDescription !== undefined) {
+            if (typeof newDescription !== "string") {
+                res.status(400)
+                throw new Error("password deve ser tipo string")
+            }
+        }
+
+        if (!newStatus) {
+            {
+                res.status(400)
+                throw new Error("DESCRIÇÃO deve ser ALFA NUMERICO E COMECAR COM LETRAS")
+            }
+        }
+
+
+
+
+
+
+        const [taskToEdit] = await db.raw(` SELECT * FROM authors where id =${id}`)
+        if (taskToEdit) {
+            taskToEdit.id = newid || taskToEdit.id
+            taskToEdit.title = newTitle || taskToEdit.title
+            taskToEdit.description = newDescription || taskToEdit.description
+            taskToEdit.status = newStatus || taskToEdit.status
+            await db("tasks").update([taskToEdit]).where({ id })
+        }
+        res.status(201).send("task editada com sucesso")
+    } catch (error) {
+        console.log(error)
+
+        if (req.statusCode === 200) {
+            res.status(500)
+        }
+
+        if (error instanceof Error) {
+            res.send(error.message)
+        } else {
+            res.send("Erro inesperado")
+        }
+    }
+})
+
+
 
 app.get("/authors", async (req: Request, res: Response) => {
     try {
