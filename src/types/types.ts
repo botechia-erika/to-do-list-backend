@@ -20,7 +20,7 @@ export type Task = {
     id: string,
     title: string,
     description: string,
-    status: CURRENTSTATUS.INICIADA | CURRENTSTATUS.NAOINICIADA
+    status: number
 }
 
 export enum CURRENTSTATUS {

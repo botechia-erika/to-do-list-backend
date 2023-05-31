@@ -52,7 +52,7 @@ CREATE TABLE
         id TEXT PRIMARY KEY NOT NULL UNIQUE,
         title TEXT NOT NULL UNIQUE,
         description TEXT NOT NULL,
-        status BLOB,
+        status NUMBER BIGINT,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
 
