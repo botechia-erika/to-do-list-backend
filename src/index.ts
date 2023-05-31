@@ -15,7 +15,7 @@ app.use(express.json())
 
 
 app.get("/tasks", async (req: Request, res: Response) => {
-    const result = await db.raw(`SELECT *FROM tasks`)
+    const result = await db.select(`*`).from(`authors`)
     res.send(result)
     try {
         res.status(200).send({ tasks: result })
@@ -32,9 +32,10 @@ app.get("/tasks", async (req: Request, res: Response) => {
             res.send("Erro inesperado")
         }
     }
+    res.render('/tasks', { message: 'tasks atualizadas' })
 })
 
-
+/*--
 app.get("/authors", async (req: Request, res: Response) => {
     const result = await db.raw(`SELECT * FROM authors`)
     res.send(result)
@@ -53,14 +54,15 @@ app.get("/authors", async (req: Request, res: Response) => {
             res.send("Erro inesperado")
         }
     }
+
 })
+*/
 
-
-app.get("/authors/create", async (req: Request, res: Response) => {
-    const result = await db.raw(`SELECT * FROM authors`)
-    res.send(result)
+app.get("/authors", async (req: Request, res: Response) => {
     try {
-        res.status(200).send({ tasks: result })
+        const result = await db.select(`*`).from(`authors`)
+
+        res.status(200).send({ authors: result, message: 'authors atualizado' })
     } catch (error) {
         console.log(error)
 
@@ -78,47 +80,48 @@ app.get("/authors/create", async (req: Request, res: Response) => {
 
 app.post("/authors/create", async (req: Request, res: Response) => {
 
-    const inputName = req.body.name
-    const inputUsername = req.body.username
-    const inputPassword = req.body.password
-    const inputCPFouCNPJ = req.body.id
-
-
-    if (typeof inputName != "string") {
-        res.status(400).send({ message: 'nome invalido' })
-    }
-
-    if (typeof inputName != "string") {
-        res.status(400).send({ message: 'nome invalido' })
-    }
-    if (typeof inputUsername != "string") {
-        res.status(400).send('username alfa-numerico')
-    }
-    if (typeof inputPassword != "string") {
-        res.status(400).send("outra senha essa é invalida tente alfa-numerico")
-    }
-    if (typeof inputCPFouCNPJ != "string") {
-        res.status(400).send('CPF ou CNPJ INVALIDO não é possivel criar numero de usuario')
-    }
     try {
+        const id = req.body.id
+        const name = req.body.name
+        const username = req.body.username
+        const email = req.body.email
+        const password = req.body.password
+        const role = req.body.role
 
-        const result = await db.raw(`
- INSERT INTO TABLE authors (
-        id,
-        name,
-        username,
-        email,
-        password
-        ) VALUES(
-        id = req.params.id,
-        name = req.param.name,
-        username= req.params.username,
-        email=req.params.email,
-        password=req.params.password; `)
-        res.status(301).send(result).redirect('/users')
-        res.send('cadastro de sucesso!')
-    }
-    catch (error) {
+
+        if (typeof id !== typeof "string") {
+            res.status(400).send({ message: 'nome invalido' })
+        }
+
+        if (typeof name != "string") {
+            res.status(400).send({ message: 'nome invalido' })
+        }
+        if (typeof username != "string") {
+            res.status(400).send('username alfa-numerico')
+        }
+        if (typeof email != "string") {
+            res.status(400).send('username alfa-numerico')
+        }
+        if (typeof password != "string") {
+            res.status(400).send("outra senha essa é invalida tente alfa-numerico")
+        }
+        if (typeof role != "string") {
+            res.status(400).send('username alfa-numerico')
+        }
+
+        const newAuthor: { id: string, name: string, username: string, email: string, password: string, role: string } = {
+            id,
+            name,
+            username,
+            email,
+            password,
+            role
+        }
+        await db("authors").insert(newAuthor)
+        res.status(200).send("cadastro com sucesso")
+    } catch (error) {
+        console.log(error)
+
         if (req.statusCode === 200) {
             res.status(500)
         }
@@ -130,6 +133,34 @@ app.post("/authors/create", async (req: Request, res: Response) => {
         }
     }
 })
+app.delete("/authors/:id", async (req: Request, res: Response) => {
+
+    try {
+        const idToDelete = req.params.id
+
+        const [authors] = await db("authors").where({ id: idToDelete })
+        if (!authors) {
+            throw new Error("usuario  nao encontrado")
+        }
+        await db("authors").delete().where({ id: idToDelete })
+        res.status(200).send({ message: 'authors deletado com sucesso' })
+    }
+    catch (error) {
+        console.log(error)
+
+        if (req.statusCode === 200) {
+            res.status(500)
+        }
+
+        if (error instanceof Error) {
+            res.send(error.message)
+        } else {
+            res.send("Erro inesperado")
+        }
+    }
+})
+
+
 
 app.listen(3030, () => {
     console.log(`Servidor rodando na porta ${PORT}`)

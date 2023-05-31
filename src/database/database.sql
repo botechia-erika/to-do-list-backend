@@ -1,5 +1,7 @@
 -- Active: 1685366005847@@127.0.0.1@3306
 
+DROP TABLE authors;
+
 CREATE TABLE
     authors (
         id TEXT PRIMARY KEY NOT NULL UNIQUE,
@@ -11,38 +13,32 @@ CREATE TABLE
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
 
-DROP TABLE authors;
-
 INSERT INTO
-    authors(
+    authors (
         id,
         name,
         username,
         email,
-        password,
-        role
+        password
     )
 VALUES (
-        "f001",
+        "author-1",
         "VITOR LUIS LEITE",
         "VITOR-LEITE",
         "vitor94leite@gmail.com",
-        "PGelVLbc94!pc",
-        "NORMAL"
+        "PGelVLbc94!pc"
     ), (
-        "f002",
+        "author-2",
         "ROSAURIA SOAREZ",
         "ROSAURIA-SOAREZ",
         "rohtop@gmail.com",
-        "laROH!96",
-        "NORMAL"
+        "laROH!96"
     ), (
-        "f003",
+        "author-3",
         "IAN KALEB MENDONCA",
         "IAN-MENDONCA",
         "iankaleb@gmail.com",
-        "kalebinho!pc",
-        "NORMAL"
+        "kalebinho!pc"
     );
 
 SELECT * FROM authors WHERE name LIKE '%VITOR%';
@@ -108,7 +104,7 @@ SELECT * FROM authors_tasks;
 
 INSERT INTO
     authors_tasks(id_author, id_task)
-VALUES ("f001", "t001"), ("f002", "t002"), ("f003", "t003"), ("f001", "t004"), ("f002", "t004");
+VALUES ("author-1", "t001"), ("author-2", "t002"), ("author-3", "t003"), ("autor-1", "t004"), ("author-2", "t004");
 
 SELECT
     authors.name,
@@ -120,3 +116,5 @@ SELECT
 FROM tasks
     INNER JOIN authors_tasks ON tasks.id = authors_tasks.id_task
     INNER JOIN authors ON authors_tasks.id_author = authors.id;
+
+DROP TABLE authors_tasks 

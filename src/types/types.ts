@@ -3,14 +3,17 @@ export type TPerson = {
     id: string,
     name: string,
     username: string,
+    email: string,
     password: string,
-    role: CATEGORY.ADM | CATEGORY.INSTRUCTOR | CATEGORY.NORMAL
+    role: CATEGORY.ADM | CATEGORY.INSTRUCTOR | CATEGORY.NORMAL | CATEGORY.AUTHOR | CATEGORY.BUYER
 }
 
 enum CATEGORY {
     ADM = "ADM",
     NORMAL = "NORMAL",
-    INSTRUCTOR = "INSTRUCTOR"
+    INSTRUCTOR = "INSTRUCTOR",
+    AUTHOR = "AUTHOR",
+    BUYER = "BUYER"
 }
 
 export type Task = {
@@ -37,13 +40,27 @@ export type TProjects = {
     repo: string,
     url: string,
     release: number,
-    modulos_idModulos: string,
+    modulos_idModulos: MR;
 }
-enum MODULOREFERENCIA {
-    M1 = "FUNDAMENTOS",
-    M2 = "FRONTEND",
-    M3 = "BACKEND",
-    M4 = "SQL",
-    M5 = "TESTING"
+enum MR {
+    "M0" = FUNDAMENTOS = 0,
+    "M1" = FRONTEND = 1,
+    "M2" = BACKEND = 2,
+    "M3" = SQL = 3,
+    "M4" = TESTING = 4
 }
 
+
+const Title = {
+    name: "CONWAY",
+    product: "AULAS",
+    value: "LABENU"
+}
+type HEADER = {
+    name: "PROJETOS",
+    product: 8,
+    key: "AUTHORIZHATION",
+    AUTHORIZATHION: "CONWAY-BOTECHIA-ERIKA",
+    LABENUMERO: "22124748",
+    LABEMAIL: "BOTECHIAERI@GMAIL.COM"
+}

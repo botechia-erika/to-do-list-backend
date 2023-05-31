@@ -5,7 +5,7 @@ const dataProjects = [{
     repo: 'https://github.com/botechia-erika/projeto-intro-web',
     url: 'https://lively-boba-ce5995.netlify.app/',
     release: 2023,
-    modulos_idModulos: 1,
+    modulos_idModulos: M0,
     name_author: "BOTECHIA-ERIKA"
 },
 {
@@ -15,7 +15,7 @@ const dataProjects = [{
     repo: 'EM-BREVE',
     url: 'EM-BREVE',
     release: 2023,
-    modulos_idModulos: 1,
+    modulos_idModulos: M1,
     name_author: "BOTECHIA-ERIKA"
 },
 {
@@ -25,7 +25,7 @@ const dataProjects = [{
     repo: 'EM-BREVE',
     url: 'EM-BREVE',
     release: 2023,
-    modulos_idModulos: 1,
+    modulos_idModulos: M1,
     name_author: "BOTECHIA-ERIKA"
 },
 {
@@ -35,7 +35,7 @@ const dataProjects = [{
     repo: 'EM-BREVE',
     url: 'EM-BREVE',
     release: 2023,
-    modulos_idModulos: 1,
+    modulos_idModulos: M1,
     name_author: "BOTECHIA-ERIKA"
 },
 {
@@ -45,7 +45,7 @@ const dataProjects = [{
     repo: 'https://github.com/botechia-erika/PROJETO-FRONTENDREACT',
     url: 'https://pilares-funcional-sur.surge.sh/',
     release: 2023,
-    modulos_idModulos: 2,
+    modulos_idModulos: M2,
     name_author: "BOTECHIA-ERIKA"
 },
 {
@@ -55,7 +55,7 @@ const dataProjects = [{
     repo: 'https://github.com/botechia-erika/PROJETO-REACT-APIS',
     url: 'https://my-poke-api-conway.surge.sh/',
     release: 2023,
-    modulos_idModulos: 2,
+    modulos_idModulos: M2,
     name_author: "BOTECHIA-ERIKA"
 },
 {
@@ -65,7 +65,7 @@ const dataProjects = [{
     repo: 'https://github.com/botechia-erika/TO-DO-LIST-BACKEND',
     url: 'EM-BREVE',
     release: 2023,
-    modulos_idModulos: 3,
+    modulos_idModulos: M3,
     name_author: "BOTECHIA-ERIKA"
 },
 {
@@ -75,7 +75,7 @@ const dataProjects = [{
     repo: 'EM-BREVE',
     url: 'EM-BREVE',
     release: 2023,
-    modulos_idModulos: 3,
+    modulos_idModulos: M2,
     name_author: "BOTECHIA-ERIKA"
 },
 {
@@ -85,7 +85,7 @@ const dataProjects = [{
         repo: 'EM-BREVE',
         url: 'EM-BREVE',
         release: 2023,
-        modulos_idModulos: 3,
+        modulos_idModulos: M2,
         name_author: "BOTECHIA-ERIKA"
 },
 {
@@ -95,7 +95,7 @@ const dataProjects = [{
     repo: 'EM-BREVE',
     url: 'EM-BREVE',
     release: 2023,
-    modulos_idModulos: 3,
+    modulos_idModulos: M0,
     name_author: "BOTECHIA-ERIKA"
 },
 ];
