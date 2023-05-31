@@ -4,6 +4,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dataTasks from './data/dataTasks';
 import dataProjects from './data/dataProjects';
+import { CATEGORY } from './types/types';
 
 
 const app = express()
@@ -160,8 +161,113 @@ app.delete("/authors/:id", async (req: Request, res: Response) => {
     }
 })
 
+app.get("/authors/search", async (req: Request, res: Response) => {
+
+    try {
+        const q = req.query.q
+        const [authors] = await db("authors").where({ id: q })
+        res.status(200).send({ authors })
+    }
+    catch (error) {
+        console.log(error)
+
+        if (req.statusCode === 200) {
+            res.status(500)
+        }
+
+        if (error instanceof Error) {
+            res.send(error.message)
+        } else {
+            res.send("Erro inesperado")
+        }
+    }
+})
+
+app.put("/authors/:id", async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id
+        const newid = req.body.id as string | undefined
+        const newName = req.body.name as string | undefined
+        const newUsername = req.body.username as string | undefined
+        const newemail = req.body.email as string | undefined
+        const newpassword = req.body.password as string | undefined
+        const newType = req.body.role as CATEGORY
 
 
+        if (newemail !== undefined) {
+            if (typeof newemail !== "string") {
+                res.status(400)
+                throw new Error("email deve ser tipo string")
+            }
+        }
+
+        if (newpassword !== undefined) {
+            if (typeof newpassword !== "string") {
+                res.status(400)
+                throw new Error("password deve ser tipo string")
+            }
+        }
+
+        if (newName !== undefined) {
+            if (typeof newName !== "string") {
+                res.status(400)
+                throw new Error("name deve ser tipo string")
+            }
+        }
+
+
+        if (newUsername !== undefined) {
+            if (typeof newUsername !== "string") {
+                res.status(400)
+                throw new Error("name deve ser tipo string")
+            }
+        }
+
+
+        if (newid !== undefined) {
+            if (typeof newid !== "string") {
+                res.status(400)
+                throw new Error("id deve ser tipo string")
+            }
+        }
+
+        if (newType !== CATEGORY.NORMAL) {
+            if (
+                newType !== CATEGORY.ADM &&
+                newType !== CATEGORY.BUYER &&
+                newType !== CATEGORY.AUTHOR &&
+                newType !== CATEGORY.INSTRUCTOR
+            ) {
+                res.status(400)
+
+                throw new Error("type deve ser um tipo valido")
+            }
+        }
+
+
+
+
+        const [accountToEdit] = await db.raw(` SELECT * FROM authors where id = "${id}"`)
+        if (accountToEdit) {
+            accountToEdit.id = newid || accountToEdit.id
+            accountToEdit.name = newName || accountToEdit.name
+            accountToEdit.username = newUsername || accountToEdit.username
+            accountToEdit.email = newemail || accountToEdit.email
+            accountToEdit.password = newpassword || accountToEdit.password
+            await db("authors").update(accountToEdit).where({ id })
+        }
+
+
+        res.status(200).send("authors editado com sucesso")
+    } catch (error) {
+        console.log(error)
+        if (res.statusCode === 200) {
+            res.status(500)
+            res.send("error inesperado!")
+        }
+        res.send(error.message)
+    }
+})
 app.listen(3030, () => {
     console.log(`Servidor rodando na porta ${PORT}`)
 })
