@@ -183,7 +183,7 @@ app.get("/authors/search", async (req: Request, res: Response) => {
     }
 })
 
-app.put("/authors/:id", async (req: Request, res: Response) => {
+app.put("/authors", async (req: Request, res: Response) => {
     try {
         const id = req.params.id
         const newid = req.body.id as string | undefined
@@ -231,12 +231,14 @@ app.put("/authors/:id", async (req: Request, res: Response) => {
             }
         }
 
-        if (newType !== CATEGORY.NORMAL) {
+        if (newType) {
             if (
                 newType !== CATEGORY.ADM &&
                 newType !== CATEGORY.BUYER &&
                 newType !== CATEGORY.AUTHOR &&
-                newType !== CATEGORY.INSTRUCTOR
+                newType !== CATEGORY.INSTRUCTOR &&
+                newType !== CATEGORY.NORMAL
+
             ) {
                 res.status(400)
 
@@ -256,9 +258,7 @@ app.put("/authors/:id", async (req: Request, res: Response) => {
             accountToEdit.password = newpassword || accountToEdit.password
             await db("authors").update(accountToEdit).where({ id })
         }
-
-
-        res.status(200).send("authors editado com sucesso")
+        res.status(301).send("authors editado")
     } catch (error) {
         console.log(error)
         if (res.statusCode === 200) {

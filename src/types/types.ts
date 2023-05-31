@@ -5,7 +5,7 @@ export type TPerson = {
     username: string,
     email: string,
     password: string,
-    role: CATEGORY
+    role: CATEGORY.ADM | CATEGORY.INSTRUCTOR | CATEGORY.NORMAL | CATEGORY.BUYER
 }
 
 export enum CATEGORY {
