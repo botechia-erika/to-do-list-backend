@@ -44,12 +44,12 @@ export type TProjects = {
 }
 
 
-const Title = {
+const TitleLBN = {
     name: "CONWAY",
     product: "AULAS",
     value: "LABENU"
 }
-type HEADER = {
+type HEADERAuth = {
     name: "PROJETOS",
     product: 8,
     key: "AUTHORIZHATION",

@@ -15,28 +15,8 @@ app.use(cors())
 app.use(express.json())
 
 
-app.get("/tasks", async (req: Request, res: Response) => {
-    const result = await db.select(`*`).from(`authors`)
-    res.send(result)
-    try {
-        res.status(200).send({ tasks: result })
-    } catch (error) {
-        console.log(error)
 
-        if (req.statusCode === 200) {
-            res.status(500)
-        }
-
-        if (error instanceof Error) {
-            res.send(error.message)
-        } else {
-            res.send("Erro inesperado")
-        }
-    }
-    res.render('/tasks', { message: 'tasks atualizadas' })
-})
-
-/*--
+/**
 app.get("/authors", async (req: Request, res: Response) => {
     const result = await db.raw(`SELECT * FROM authors`)
     res.send(result)
@@ -45,7 +25,7 @@ app.get("/authors", async (req: Request, res: Response) => {
     } catch (error) {
         console.log(error)
 
-        if (req.statusCode === 200) {
+        if (req.statusCode === 200) {s
             res.status(500)
         }
 
@@ -183,7 +163,7 @@ app.get("/authors/search", async (req: Request, res: Response) => {
     }
 })
 
-app.put("/authors", async (req: Request, res: Response) => {
+app.put("/authors/:id", async (req: Request, res: Response) => {
     try {
         const id = req.params.id
         const newid = req.body.id as string | undefined
@@ -191,7 +171,7 @@ app.put("/authors", async (req: Request, res: Response) => {
         const newUsername = req.body.username as string | undefined
         const newemail = req.body.email as string | undefined
         const newpassword = req.body.password as string | undefined
-        const newType = req.body.role as CATEGORY
+        const newType = req.body.role
 
 
         if (newemail !== undefined) {
@@ -256,6 +236,7 @@ app.put("/authors", async (req: Request, res: Response) => {
             accountToEdit.username = newUsername || accountToEdit.username
             accountToEdit.email = newemail || accountToEdit.email
             accountToEdit.password = newpassword || accountToEdit.password
+            accountToEdit.role = newType || accountToEdit.role
             await db("authors").update(accountToEdit).where({ id })
         }
         res.status(301).send("authors editado")
@@ -268,6 +249,199 @@ app.put("/authors", async (req: Request, res: Response) => {
         res.send(error.message)
     }
 })
+
+app.get("/tasks", async (req: Request, res: Response) => {
+    const result3 = await db.select(`*`).from(`tasks`)
+    res.send(result3)
+    try {
+        res.status(200).send({ tasks: result3 })
+    } catch (error) {
+        console.log(error)
+
+        if (req.statusCode === 200) {
+            res.status(500)
+        }
+
+        if (error instanceof Error) {
+            res.send(error.message)
+        } else {
+            res.send("Erro inesperado")
+        }
+    }
+})
+
+
+/* SEARCH TASKS*/
+
+
+app.get("/tasks/search", async (req: Request, res: Response) => {
+
+    try {
+        const q = req.query.q
+        const [tasks] = await db("tasks").where({ id: q })
+        res.status(200).send({ tasks })
+    }
+    catch (error) {
+        console.log(error)
+
+        if (req.statusCode === 200) {
+            res.status(500)
+        }
+
+        if (error instanceof Error) {
+            res.send(error.message)
+        } else {
+            res.send("Erro inesperado")
+        }
+    }
+})
+
+
+/******************************************CREATE TASKS***********************************************/
+app.post("/tasks/create", async (req: Request, res: Response) => {
+
+    try {
+        const id = req.body.id
+        const title = req.body.title
+        const description = req.body.description
+        const status = req.body.status
+
+        if (typeof id !== typeof "string") {
+            res.status(400).send({ message: 'id invalido' })
+        }
+
+        if (typeof title != "string") {
+            res.status(400).send({ message: 'title deve ser ser descricao alfa numerica iniciada com letras' })
+        }
+        if (typeof description != "string") {
+            res.status(400).send('description deve ser ser descricao alfa numerica iniciada com letras')
+        }
+
+
+        const newTask: { id: string, title: string, description: string, status: number } = {
+            id,
+            title,
+            description,
+            status
+        }
+        await db("tasks").insert(newTask)
+        res.status(200).send("new task adicionada com sucesso")
+    } catch (error) {
+        console.log(error)
+
+        if (req.statusCode === 200) {
+            res.status(500)
+        }
+
+        if (error instanceof Error) {
+            res.send(error.message)
+        } else {
+            res.send("Erro inesperado")
+        }
+    }
+})
+/*************************TASKS DELETE *************************/
+
+app.delete("/tasks/:id", async (req: Request, res: Response) => {
+
+    try {
+        const idTaskDelete = req.params.id
+
+        const [tasks] = await db("tasks").where({ id: idTaskDelete })
+        if (!tasks) {
+            throw new Error("usuario  nao encontrado")
+        }
+        await db("tasks").delete().where({ id: idTaskDelete })
+        res.status(200).send({ message: 'tasks deletado com sucesso' })
+    }
+    catch (error) {
+        console.log(error)
+
+        if (req.statusCode === 200) {
+            res.status(500)
+        }
+
+        if (error instanceof Error) {
+            res.send(error.message)
+        } else {
+            res.send("Erro inesperado")
+        }
+    }
+})
+
+
+/***********************************EDIT TASKS *************************************************/
+
+app.put("/tasks/:id", async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id
+        const newid = req.body.id as string | undefined
+        const newTitle = req.body.title as string | undefined
+        const newDescription = req.body.description as string | undefined
+        const newStatus = req.body.status as number | undefined
+
+
+        if (newid !== undefined) {
+            if (typeof newid !== "string") {
+                res.status(400)
+                throw new Error("email deve ser tipo string")
+            }
+        }
+
+
+        if (newTitle !== undefined) {
+            if (typeof newTitle !== "string") {
+                res.status(400)
+                throw new Error("email deve ser tipo string")
+            }
+        }
+
+        if (newDescription !== undefined) {
+            if (typeof newDescription !== "string") {
+                res.status(400)
+                throw new Error("password deve ser tipo string")
+            }
+        }
+
+        if (!newStatus) {
+            {
+                res.status(400)
+                throw new Error("DESCRIÇÃO deve ser ALFA NUMERICO E COMECAR COM LETRAS")
+            }
+        }
+
+
+
+
+
+
+        const [taskToEdit2] = await db.raw(` SELECT * FROM tasks where id ={id}`)
+        if (taskToEdit2) {
+            taskToEdit2.id = id || taskToEdit2.id
+            taskToEdit2.title = newTitle || taskToEdit2.title
+            taskToEdit2.description = newDescription || taskToEdit2.description
+            taskToEdit2.status = newStatus || taskToEdit2.status
+            await [taskToEdit2]
+        }
+        res.status(301).send("tasks editado")
+    } catch (error) {
+        console.log(error)
+
+        if (req.statusCode === 200) {
+            res.status(500)
+        }
+
+        if (error instanceof Error) {
+            res.send(error.message)
+        } else {
+            res.send("Erro inesperado")
+        }
+    }
+})
+
+
+
+
 app.listen(3030, () => {
     console.log(`Servidor rodando na porta ${PORT}`)
 })

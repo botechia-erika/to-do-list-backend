@@ -1,4 +1,4 @@
-findUserByName = () => {
+/*findUserByName = () => {
   import { db } from './../database/knex'
   const queryName = req.params.queryName;
   const result = await db.raw(`SELECT *FROM tasks`)
@@ -15,4 +15,4 @@ if (!queryTask) {
     } else {
         console.log(queryTask)
     }
-}
+}*/
